@@ -6,3 +6,9 @@
 ![image of mySQL]
 
 (https://github.com/Javalava76/bamazon/blob/master/images/MySQL.png)
+
+![image of bash running bamazon using node.js]
+
+(https://github.com/Javalava76/bamazon/blob/master/images/bamazonInBash.png)
+
+
