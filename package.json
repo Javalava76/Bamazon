@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/Javalava76/bamazon/issues"
   },
-  "homepage": "https://github.com/Javalava76/bamazon#readme"
+  "homepage": "https://github.com/Javalava76/bamazon#readme",
+  "dependencies": {
+    "easy-table": "^1.1.0",
+    "inquirer": "^3.2.0",
+    "mysql": "^2.13.0"
+  }
 }

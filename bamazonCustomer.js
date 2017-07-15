@@ -12,20 +12,21 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
 	if (err) throw err;
-	console.log("connected as id " + connection.threadId);
-	printProductList();
+	// console.log("connected as id " + connection.threadId);
+	console.log("\n\n\n\nIT'S TIME TO SHOP BAMAZON!\n\n")
+	productList();
 
 
 });
 
 
-function printProductList() {
+function productList() {
 
 	connection.query("SELECT * FROM products", function (err, result, fields) {
 		if (err) throw err;
 
 		var data = [];
-		var t = new Table;
+		var table = new Table;
 
 		for(var i = 0; i < result.length; i++) {
 
@@ -39,14 +40,14 @@ function printProductList() {
 
 		};
 		data.forEach(function(result) {
-			t.cell("item_id", result.id);
-			t.cell("product_name", result.name);
-			t.cell("department_name", result.dept);
-			t.cell("price", result.price, Table.number(2));
-			t.cell("quantity", result.quantity);
-			t.newRow();
+			table.cell("item_id", result.id);
+			table.cell("product_name", result.name);
+			table.cell("department_name", result.dept);
+			table.cell("price", result.price, Table.number(2));
+			table.cell("quantity", result.quantity);
+			table.newRow();
 		})
-		console.log(t.toString());
+		console.log(table.toString());
 
 		inquirerPrompt();
 	});
@@ -56,81 +57,62 @@ function printProductList() {
 function inquirerPrompt() {
 	// console.log("inquirerPrompt");
 
-	inquirer.prompt([
-	{
-		type: "input",
-		name: "item_id",
-		message: "Enter the ID number of the item you would like to buy:\n",
-		validate: function(value) {
-                if ((value.trim()=="") === false && isNaN(value) === false) {
-                  return true;
+	inquirer.prompt([{
+            name: "item_id",
+            type: "input",
+            message: "What is the ID of the product you would like to buy?",
+            validate: function(value) {
+                return (value !== "") && (value.length === 2) && (value < 22);
+            }
+        }, {
+            name: "amount",
+            type: "input",
+            message: "\nHow many would you like to buy?",
+            validate: function(value) {
+                if (isNaN(value) === false) {
+                    return true;
                 }
                 return false;
-              }
-            },
-    ]).then(function(value) {
+            }
+        }
 
-    	if (value.item_id < 22 && value.item_id > -1) {
+		]).then(function(answer) {
+		// console.log(answer.item_id);
+		// console.log(answer.amount);
 
-    	inquirer.prompt([
-
-			{
-			type: "input",
-			name: "quantity",
-			message: "How many would you like to purchase?"
-			},
-			]).then(function(res) {
-		
-
-		queryItem(res.item_id, parseInt(res.quantity));
-		
-	
-
-
-		else {
-
-		console.log("Invalid Product ID");
-		inquirerPrompt();
-		}
-
-	});
-
+		queryItem(answer.item_id, parseInt(answer.amount));
+	})
 }
 
-
-
-
-
-function queryItem(item_id, quantity) {
+function queryItem(item_id, amount) {
 	// console.log(item_id);
-	// console.log(quantity);
+	// console.log(amount);
 
 	connection.query("SELECT * FROM products WHERE item_id=?", item_id, function (err, result, fields) {
 		if (err) throw err;
 
 		var name = result[0].product_name;
 		var price = result[0].price;
-		var total_cost = price * quantity;
+		var total_cost = price * amount;
 
-		if(quantity <= result[0].quantity ) {
-			var new_quantity = result[0].quantity - quantity;
+		if(amount <= result[0].quantity ) {
+			var new_quantity = result[0].quantity - amount;
 			// console.log(new_quantity);
 
 			connection.query("UPDATE products SET quantity=? WHERE item_id=?", [new_quantity, item_id], function (err, res, fields) {
 				if (err) throw err;
 
-				console.log("\nYou have ordered " + quantity + " " + name + "s.");
-				console.log("Total cost of the order is $" + total_cost.toFixed(2) + "\n\n" );
-				printProductList();
+				console.log("\n\nYou have placed an order for " + amount + " " + name +"s");
+				console.log("\nTotal cost of the order is $" + total_cost.toFixed(2) + "\n\n" );
+				productList();
 
 			});
 		}
 		else {
-			console.log("\n\nError: insufficient quantity.\n\n");
-			printProductList();
+			console.log("\n\nError: Insufficient quantity. Please choose again.\n\n");
+			productList();
 		}
 
 	});
 }
 
-// printProductList(inquirerPrompt);
