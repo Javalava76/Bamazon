@@ -1,0 +1,19 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "shopping app",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Javalava76/bamazon.git"
+  },
+  "author": "kz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Javalava76/bamazon/issues"
+  },
+  "homepage": "https://github.com/Javalava76/bamazon#readme"
+}
