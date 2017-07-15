@@ -5,4 +5,4 @@
 
 ![image of mySQL]
 
-(https://Javalava76.github.com/bamazon/images/MySQL.png)
+(https://github.com/Javalava76/bamazon/blob/master/images/MySQL.png)
